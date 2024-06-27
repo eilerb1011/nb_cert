@@ -14,10 +14,10 @@ export nb_id
 DIR=$PWD
 chmod +x $DIR/deploy-cert.sh
 chmod +x $DIR/nb-cert.sh
-chmod +x $DIR/acme-lin-dns.py
+chmod +x $DIR/acme-lindns-auth.py
 chmod +x $DIR/post-install.sh
 apt update && apt install -y certbot jq python3
-mv $DIR/acme-lin-dns.py /etc/letsencrypt/
+mv $DIR/acme-lindns-auth.py /etc/letsencrypt/
 mv $DIR/nb-cert.sh /etc/letsencrypt/
 certbot certonly --manual --manual-auth-hook /etc/letsencrypt/acme-lindns-auth.py --preferred-challenges dns -d $fqdn 
 sleep 60
