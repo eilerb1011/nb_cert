@@ -1,20 +1,30 @@
 #!/bin/bash
-
-# Fully Qualified Domain Name (FQDN)
+#####################
+#if https_config exists, update with new cert
+#else if http exists, update to https
+#if neither, exit
+# Fully Qualified Domain Name (FQDN) ie www.mydomain.com - how it looks on your cert
 FQDN=""
-
-# Path to certbot renewal directory
-CERTBOT_RENEWAL_DIR="/etc/letsencrypt/live/$FQDN"
 
 # Linode API details
 TOKEN=""
 NB_ID=""
-CONFIG_ID=$(curl "https://api.linode.com/v4/nodebalancers/"$NB_ID"/configs" -H "Authorization: Bearer $TOKEN" | jq '.data[] | select (.protocol == "https") | .id')
-
+api_base_url="https://api.linode.com/v4"
 # JSON file to store SSL configuration
 SSL_CONFIG_FILE="/tmp/ssl_config.json"
 rm -rf $SSL_CONFIG_FILE
+# Path to certbot renewal directory
+CERTBOT_RENEWAL_DIR="/etc/letsencrypt/live/$FQDN"
 
+CONFIG_ID=""
+CONFIG_ID=$(curl "$api_base_url/nodebalancers/$NB_ID/configs" -H "Authorization: Bearer $TOKEN" | jq '.data[] | select (.protocol == "https") | .id')
+if [[ -z "$CONFIG_ID" ]]; then
+CONFIG_ID=$(curl -s -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" "$api_base_url/nodebalancers/$NB_ID/configs" | jq -r '.data[] | select(.protocol == "http") | .id')
+if [[ -z "$CONFIG_ID" ]]; then
+    echo "No Nodebalancer Configs exist"
+    exit 1
+fi
+fi
 # Check if cert and key files exist
 if [ ! -f "$CERTBOT_RENEWAL_DIR/fullchain.pem" ] || [ ! -f "$CERTBOT_RENEWAL_DIR/privkey.pem" ]; then
     echo "Error: Certbot renewal files not found."
@@ -46,7 +56,7 @@ EOF
 echo "$SSL_JSON" > "$SSL_CONFIG_FILE"
 
 # Update Linode API with new SSL configuration
-curl -X PUT "https://api.linode.com/v4/nodebalancers/$NB_ID/configs/$CONFIG_ID" \
+curl -X PUT "$api_base_url/nodebalancers/$NB_ID/configs/$CONFIG_ID" \
 -H "Authorization: Bearer $TOKEN" \
 -H "Content-Type: application/json" \
 -d @"$SSL_CONFIG_FILE"
