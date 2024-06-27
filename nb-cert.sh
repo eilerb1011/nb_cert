@@ -4,11 +4,11 @@
 #else if http exists, update to https
 #if neither, exit
 # Fully Qualified Domain Name (FQDN) ie www.mydomain.com - how it looks on your cert
-FQDN=""
+FQDN=$fqdn
 
 # Linode API details
-TOKEN=""
-NB_ID=""
+TOKEN=$nb_token
+NB_ID=$nb_id
 api_base_url="https://api.linode.com/v4"
 # JSON file to store SSL configuration
 SSL_CONFIG_FILE="/tmp/ssl_config.json"
