@@ -6,7 +6,7 @@ import sys
 import subprocess
 import time
 ### EDIT THESE: Configuration values ###
-TOKEN=""
+TOKEN=$dns_token
 # URL to acme-dns instance
 ACMEDNS_URL = "https://auth.acme-dns.io"
 # Path for acme-dns credential storage
