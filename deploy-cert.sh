@@ -11,15 +11,15 @@ export dns_token
 export fqdn
 export nb_token
 export nb_id
-$DIR=$PWD
+DIR=$PWD
 chmod +x $DIR/deploy-cert.sh
-chmod +x $DIR/nb_cert/nb-cert.sh
-chmod +x $DIR/nb_cert/acme-lin-dns.py
-chmod +x $DIR/nb_cert/post-install.sh
+chmod +x $DIR/nb-cert.sh
+chmod +x $DIR/acme-lin-dns.py
+chmod +x $DIR/post-install.sh
 apt update && apt install -y certbot jq python3
-mv $DIR/nb_cert/acme-lin-dns.py /etc/letsencrypt/
-mv $DIR/nb_cert/nb-cert.sh /etc/letsencrypt/
+mv $DIR/acme-lin-dns.py /etc/letsencrypt/
+mv $DIR/nb-cert.sh /etc/letsencrypt/
 certbot certonly --manual --manual-auth-hook /etc/letsencrypt/acme-lindns-auth.py --preferred-challenges dns -d $fqdn 
 sleep 60
 nb-cert.sh
-post-install.sh
+post_install.sh
