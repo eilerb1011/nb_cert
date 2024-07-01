@@ -1,6 +1,6 @@
 # deploy-cert.sh
 Cert deployment and updater for Nodebalancer - place in /etc
-The script in the repo should be added to your certbot renewal service in systemctl using the post_install.sh
+The script in the repo should be added to your certbot renewal service in systemctl using the post-install.sh
 The following variables should be set -
 - FQDN should equal the full hostname tied to your nodebalancer as requested in your certificate
 - NB_ID should equal the numeric value of your nodebalancer ID as you have already set up
