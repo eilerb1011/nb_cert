@@ -4,11 +4,13 @@
 #else if http exists, update to https
 #if neither, exit
 # Fully Qualified Domain Name (FQDN) ie www.mydomain.com - how it looks on your cert
-FQDN=$fqdn
+FQDN=""
 
 # Linode API details
-TOKEN=$nb_token
-NB_ID=$nb_id
+##Add your newly created limited purpose token for Nodebalancer
+TOKEN=""
+##Add the numeric Nodebalancer ID here
+NB_ID=""
 api_base_url="https://api.linode.com/v4"
 # JSON file to store SSL configuration
 SSL_CONFIG_FILE="/tmp/ssl_config.json"
